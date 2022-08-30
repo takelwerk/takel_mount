@@ -1,0 +1,76 @@
+---
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint molecule/*/*.yml
+  flake8
+platforms:
+  - name: molecule-takel-mount
+    image: takelage/takelbase
+    command: /lib/systemd/systemd
+    privileged: true
+    pre_build_image: true
+provisioner:
+  name: ansible
+  log: true
+  config_options:
+    defaults:
+      interpreter_python: auto_silent
+  inventory:
+    group_vars:
+      all:
+        takel_mount_list:
+          - name: takel-test_log
+            path: /tmp/mount/log
+            src: /var/log
+            fstype: none
+            state: present
+            user: root
+            group: root
+            options:
+              - bind
+              - uid=0
+              - gid=0
+          - name: takel-test
+            path: /tmp/mount/run
+            src: /var/run
+            fstype: none
+            state: mounted
+            user: root
+            group: root
+            options:
+              - bind
+              - uid=0
+              - gid=0
+verifier:
+  name: testinfra
+  additional_files_or_dirs:
+    - ../system/test_*.py
+  options:
+    # p: cacheprovider
+    s: true
+scenario:
+  create_sequence:
+    - create
+  check_sequence:
+    - destroy
+    - create
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - create
+    - converge
+  destroy_sequence:
+    - destroy
+  test_sequence:
+    - lint
+    - destroy
+    - syntax
+    - create
+    - converge
+    - idempotence
+    - verify
+    - destroy

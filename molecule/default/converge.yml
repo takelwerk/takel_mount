@@ -1,0 +1,6 @@
+---
+- name: default
+  hosts: molecule-takel-mount
+
+  roles:
+    - takel-mount

@@ -1,0 +1,14 @@
+---
+takel_mount_fstab: /etc/fstab
+takel_mount_list:
+  - name: takel-test
+    path: /tmp/mount
+    src: /var/log
+    fstype: none
+    state: present
+    user: root
+    group: root
+    options:
+      - bind
+      - uid=0
+      - gid=0

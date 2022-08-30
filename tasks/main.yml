@@ -1,0 +1,7 @@
+---
+- name: (main) include mount
+  import_tasks: mount.yml
+  tags:
+    - takel
+    - takel_mount
+    - takel_mount_mount

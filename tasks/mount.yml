@@ -1,0 +1,20 @@
+---
+- name: (mount) create target folders
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.user }}"
+    group: "{{ item.group }}"
+  loop: "{{ takel_mount_list }}"
+
+- name: (mount) mount volumes
+  mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    opts: "{{ item.options | join(',') }}"
+    state: "{{ item.state }}"
+    fstype: "{{ item.fstype }}"
+    fstab: "{{ takel_mount_fstab }}"
+  loop: "{{ takel_mount_list }}"
+  tags:
+    - molecule-idempotence-notest
