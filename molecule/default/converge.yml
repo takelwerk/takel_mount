@@ -3,4 +3,4 @@
   hosts: molecule-takel-mount
 
   roles:
-    - takel-mount
+    - takel_mount
