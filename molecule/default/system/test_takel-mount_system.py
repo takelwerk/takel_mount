@@ -12,7 +12,4 @@ def get_mount_list(host, testvars):
 def test_takel_mount_mounted(host, mount_list):
     activ_mounted = host.check_output('mount')
     for mount in mount_list:
-        if mount['state'] == 'present':
-            assert mount['path'] not in activ_mounted
-        if mount['state'] == 'mounted':
-            assert mount['path'] in activ_mounted
+        assert mount['path'] in activ_mounted
